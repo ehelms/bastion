@@ -1,3 +1,4 @@
+require 'less-rails'
 require 'bastion/engine'
 
 namespace :bastion do

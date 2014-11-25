@@ -80,16 +80,39 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
+mkdir -p ./usr/share
+cp -r %{foreman_dir} ./usr/share || echo 0
+
+pushd ./usr/share/foreman
+export GEM_PATH=%{gem_dir}:%{buildroot}%{gem_dir}
+
 cat <<GEMFILE > ./bundler.d/%{gem_name}.rb
 group :bastion do
   gem '%{gem_name}'
-  gem 'less-raills'
+  gem 'less-rails'
 end
 GEMFILE
-%foreman_precompile_plugin -r bastion:assets:precompile
+
+unlink tmp
+
+export BUNDLER_EXT_NOSTRICT=1
+export BUNDLER_EXT_GROUPS="default assets bastion"
+/usr/bin/ruby193-rake bastion:assets:precompile RAILS_ENV=production --trace
+
+popd
+rm -rf ./usr
+
+mkdir -p %{buildroot}%{foreman_bundlerd_dir}
+cat <<GEMFILE > %{buildroot}%{foreman_bundlerd_dir}/%{gem_name}.rb
+group :bastion do
+  gem '%{gem_name}'
+  gem 'less-rails'
+end
+GEMFILE
 
 mkdir -p %{buildroot}%{foreman_dir}/public/assets
-ln -s %{foreman_assets_plugin} %{buildroot}%{foreman_dir}/public/assets/bastion
+ln -s %{gem_instdir}/public/assets/bastion %{buildroot}%{foreman_dir}/public/assets/bastion
+
 
 %files
 %dir %{gem_instdir}
