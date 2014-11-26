@@ -80,7 +80,12 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
-%foreman_bundlerd_file
+cat <<GEMFILE > ./bundler.d/%{gem_name}.rb
+group :bastion do
+  gem '%{gem_name}'
+  gem 'less-raills'
+end
+GEMFILE
 %foreman_precompile_plugin -r bastion:assets:precompile
 
 mkdir -p %{buildroot}%{foreman_dir}/public/assets
@@ -114,6 +119,12 @@ ln -s %{foreman_assets_plugin} %{buildroot}%{foreman_dir}/public/assets/bastion
 %files devel
 
 %changelog
+* Tue Nov 18 2014 Dominic Cleal <dcleal@redhat.com> 0.1.9-1
+- Update 'rubygem-bastion' to 0.1.9 (ericdhelms@gmail.com)
+
+* Wed Nov 12 2014 Dominic Cleal <dcleal@redhat.com> 0.1.8-1
+- Update 'rubygem-bastion' to 0.1.8 (ericdhelms@gmail.com)
+
 * Wed Nov 05 2014 Dominic Cleal <dcleal@redhat.com> 0.1.7-2
 - Convert bastion to use asset precompilation RPM macros (dcleal@redhat.com)
 
