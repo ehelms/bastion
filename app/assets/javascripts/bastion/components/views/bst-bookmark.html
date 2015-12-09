@@ -7,14 +7,15 @@
   </li>
 </ul>
 
-<div bst-modal="save()">
+<div bst-modal="save()" model="newBookmark">
+  <span>{{ bookmark.query }}</span>
   <div data-block="modal-header" translate>Add Bookmark</div>
   <div data-block="modal-body">
     <form name="bookmarkForm" class="form-horizontal" novalidate role="form">
       <div bst-form-group label="{{ 'Name' | translate }}">
         <input id="name"
                name="name"
-               ng-model="bookmark.name"
+               ng-model="newBookmark.name"
                type="text"
                tabindex="1"
                autofocus
@@ -23,7 +24,7 @@
       <div bst-form-group label="{{ 'Search query' | translate }}">
         <input id="query"
                name="query"
-               ng-model="bookmark.query"
+               ng-model="newBookmark.query"
                type="text"
                tabindex="1"
                autofocus
@@ -32,7 +33,7 @@
       <div bst-form-group label="{{ 'Public' | translate }}">
         <input id="public"
                name="public"
-               ng-model="bookmark.public"
+               ng-model="newBookmark.public"
                type="checkbox"
                tabindex="1"
                autofocus
